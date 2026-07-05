@@ -1,0 +1,50 @@
+.auth-screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--color-primary);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-accent);
+  }
+}
+
+.tagline {
+  color: var(--color-text-muted);
+  letter-spacing: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  margin: var(--space-2) 0 var(--space-5);
+}
+
+.google-btn svg {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: 14px;
+  margin-top: var(--space-3);
+}

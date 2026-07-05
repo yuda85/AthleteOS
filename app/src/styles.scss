@@ -1,0 +1,98 @@
+/* AthleteOS global styles — design tokens ported from POC (flat, touch-first, RTL) */
+
+:root {
+  --color-primary: #0D2B4E;
+  --color-accent: #4FA8E8;
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-text: #0F172A;
+  --color-text-muted: #64748B;
+
+  --cat-skill: #4FA8E8;
+  --cat-strength: #0D2B4E;
+  --cat-core: #22C55E;
+  --cat-carry: #F59E0B;
+  --cat-power: #EF4444;
+  --cat-mobility: #8B5CF6;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --tabbar-height: 64px;
+  --touch-target: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0B1220;
+    --color-surface: #111C2E;
+    --color-border: #1E2C42;
+    --color-text: #F1F5F9;
+    --color-text-muted: #94A3B8;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: 'IBM Plex Sans Hebrew', system-ui, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 16px; /* prevents iOS zoom */
+}
+
+/* Shared flat-design primitives */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--touch-target);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: opacity 150ms ease;
+
+  &:active { opacity: 0.85; }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.btn-accent {
+  @extend .btn-primary;
+  background: var(--color-accent);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
