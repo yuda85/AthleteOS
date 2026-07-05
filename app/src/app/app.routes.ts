@@ -19,9 +19,7 @@ export const routes: Routes = [
       },
       {
         path: 'plan',
-        data: { title: 'תוכנית' },
-        loadComponent: () =>
-          import('./pages/placeholder/placeholder-page').then((m) => m.PlaceholderPage),
+        loadComponent: () => import('./pages/plan/plan-page').then((m) => m.PlanPage),
       },
       {
         path: 'skills',
@@ -37,9 +35,12 @@ export const routes: Routes = [
       },
       {
         path: 'more',
-        data: { title: 'עוד' },
+        loadComponent: () => import('./pages/more/more-page').then((m) => m.MorePage),
+      },
+      {
+        path: 'more/philosophy',
         loadComponent: () =>
-          import('./pages/placeholder/placeholder-page').then((m) => m.PlaceholderPage),
+          import('./pages/more/philosophy-page').then((m) => m.PhilosophyPage),
       },
     ],
   },

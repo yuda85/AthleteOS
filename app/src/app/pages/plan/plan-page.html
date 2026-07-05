@@ -1,0 +1,75 @@
+<div class="plan-view">
+  <div class="day-pills">
+    @for (day of days; track day.id; let i = $index) {
+      <button
+        class="day-pill"
+        [class.active]="i === selectedIndex()"
+        [class.is-today]="i === todayIndex"
+        [attr.aria-pressed]="i === selectedIndex()"
+        (click)="selectDay(i)"
+      >
+        {{ day.label }}
+      </button>
+    }
+  </div>
+
+  @if (selectedDay(); as day) {
+    <div class="day-card">
+      <h2>{{ day.title }}</h2>
+      @if (day.targetTime) {
+        <div class="meta">יעד זמן: {{ day.targetTime }}</div>
+      }
+      @if (day.focus) {
+        <div class="meta">{{ day.focus }}</div>
+      }
+      <button class="btn-accent start-btn" disabled>התחל אימון (בקרוב)</button>
+    </div>
+
+    @for (section of day.sections; track section.category) {
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-dot" [style.background]="categoryMeta(section.category).cssVar"></span>
+          {{ categoryMeta(section.category).label }}
+        </div>
+
+        @for (item of section.items; track item.exerciseId) {
+          @if (exercise(item); as ex) {
+            <div class="exercise-row">
+              <div class="exercise-icon" [style.background]="categoryMeta(section.category).cssVar">
+                <aos-icon [name]="ex.icon" />
+              </div>
+              <div class="exercise-body">
+                <div class="exercise-name">
+                  {{ ex.name }}
+                  @if (tierLabel(item.tier); as tier) {
+                    <span class="tier-badge tier-{{ item.tier }}">{{ tier }}</span>
+                  }
+                </div>
+                @if (item.sets || item.reps || item.rest) {
+                  <div class="exercise-stats">
+                    @if (item.sets) {
+                      <span><b>{{ item.sets }}</b> סטים</span>
+                    }
+                    @if (item.reps) {
+                      <span><b>{{ item.reps }}</b></span>
+                    }
+                    @if (item.rest) {
+                      <span>מנוחה <b>{{ item.rest }}</b></span>
+                    }
+                  </div>
+                }
+                @if (item.note) {
+                  <div class="exercise-note">{{ item.note }}</div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+
+    @if (showRule()) {
+      <div class="rule-banner">{{ systemRule }}</div>
+    }
+  }
+</div>

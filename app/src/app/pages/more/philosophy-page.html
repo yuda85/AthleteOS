@@ -1,0 +1,44 @@
+<div class="philosophy-view">
+  <div class="tagline">{{ tagline }}</div>
+  <p class="intro-text">{{ intro }}</p>
+
+  <div class="section-title">עקרונות מנחים</div>
+  <div class="card-grid">
+    @for (p of philosophies; track p.title) {
+      <div class="philosophy-card">
+        <div class="phil-icon">
+          <aos-icon [name]="p.icon" />
+        </div>
+        <div>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.text }}</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="section-title">10 עמודי התווך של האתלט</div>
+  <div class="pillars-grid">
+    @for (p of pillars; track p.key) {
+      <div class="pillar-card">
+        <h4>{{ p.title }}</h4>
+        <p>{{ p.text }}</p>
+      </div>
+    }
+  </div>
+
+  <div class="section-title">השרשרת היומית</div>
+  <ol class="chain-list">
+    @for (c of chain; track c.title; let i = $index) {
+      <li>
+        <div class="chain-num">{{ i + 1 }}</div>
+        <div>
+          <h4>{{ c.title }}</h4>
+          <p>{{ c.text }}</p>
+        </div>
+      </li>
+    }
+  </ol>
+
+  <div class="closing-line">{{ closingLine }}</div>
+</div>

@@ -8,11 +8,13 @@ import {
   User,
 } from 'firebase/auth';
 import { FirebaseService } from './firebase.service';
+import { SeedService } from './seed.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly fb = inject(FirebaseService);
   private readonly router = inject(Router);
+  private readonly seed = inject(SeedService);
 
   /** undefined = auth state not yet resolved, null = signed out */
   private readonly userState = signal<User | null | undefined>(undefined);
@@ -28,6 +30,10 @@ export class AuthService {
     this.ready = new Promise<void>((resolve) => {
       const unsubscribe = onAuthStateChanged(this.fb.auth, (user) => {
         this.userState.set(user);
+        if (user) {
+          // Covers restored sessions that predate seeding (no-op when already seeded).
+          void this.seed.ensureSeeded(user.uid, user.displayName ?? 'אתלט').catch(() => {});
+        }
         resolve();
       });
       void unsubscribe;
@@ -35,7 +41,8 @@ export class AuthService {
   }
 
   async signInWithGoogle(): Promise<void> {
-    await signInWithPopup(this.fb.auth, new GoogleAuthProvider());
+    const cred = await signInWithPopup(this.fb.auth, new GoogleAuthProvider());
+    await this.seed.ensureSeeded(cred.user.uid, cred.user.displayName ?? 'אתלט');
     await this.router.navigateByUrl('/dashboard');
   }
 

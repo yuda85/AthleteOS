@@ -1,0 +1,122 @@
+.philosophy-view {
+  padding: var(--space-3);
+  padding-bottom: calc(var(--tabbar-height) + var(--space-4));
+}
+
+.tagline {
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+}
+
+.intro-text {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: var(--space-4);
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-2);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.philosophy-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  gap: var(--space-3);
+
+  h3 { margin: 0 0 4px; font-size: 15px; }
+  p { margin: 0; font-size: 13px; color: var(--color-text-muted); line-height: 1.6; }
+}
+
+.phil-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  aos-icon { width: 20px; height: 20px; }
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.pillar-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+
+  h4 { margin: 0 0 2px; font-size: 13px; }
+  p { margin: 0; font-size: 11.5px; color: var(--color-text-muted); line-height: 1.5; }
+}
+
+.chain-list {
+  list-style: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+
+  li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .chain-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  h4 { margin: 0; font-size: 14px; }
+  p { margin: 2px 0 0; font-size: 12.5px; color: var(--color-text-muted); }
+}
+
+.closing-line {
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  padding: var(--space-4) var(--space-2);
+  color: var(--color-primary);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-accent);
+  }
+}
