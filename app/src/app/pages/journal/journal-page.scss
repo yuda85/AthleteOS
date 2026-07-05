@@ -1,0 +1,85 @@
+.journal-view {
+  padding: var(--space-3);
+  padding-bottom: calc(var(--tabbar-height) + var(--space-4));
+
+  h1 { font-size: 22px; margin: 0 0 var(--space-3); }
+}
+
+.empty-hint {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-4) 0;
+}
+
+.session-card {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  overflow: hidden;
+}
+
+.session-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  padding: var(--space-3);
+  text-align: start;
+  min-height: var(--touch-target);
+
+  aos-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--color-text-muted);
+    transform: rotate(90deg);
+    transition: transform 200ms ease;
+
+    &.open { transform: rotate(-90deg); }
+  }
+}
+
+.session-title { font-weight: 600; font-size: 15px; }
+.session-meta { font-size: 12.5px; color: var(--color-text-muted); margin-top: 2px; }
+
+.session-body {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-3);
+}
+
+.entry {
+  margin-bottom: var(--space-2);
+}
+
+.entry-name { font-weight: 600; font-size: 13.5px; }
+
+.entry-sets {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+
+  li {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.delete-session {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  border: none;
+  background: transparent;
+  color: var(--color-danger);
+  font-size: 12.5px;
+  font-weight: 600;
+  min-height: var(--touch-target);
+
+  aos-icon { width: 14px; height: 14px; }
+}

@@ -1,0 +1,65 @@
+<div class="summary-view">
+  @if (data(); as d) {
+    <div class="head">
+      <div class="head-icon">
+        <aos-icon name="check" />
+      </div>
+      <h1>אימון הושלם!</h1>
+    </div>
+
+    <div class="totals">
+      <div class="total card">
+        <b>{{ durationLabel() }}</b>
+        <span>משך</span>
+      </div>
+      <div class="total card">
+        <b>{{ d.session.entries.length }}</b>
+        <span>תרגילים</span>
+      </div>
+      <div class="total card">
+        <b>{{ totalSets() }}</b>
+        <span>סטים</span>
+      </div>
+    </div>
+
+    @if (d.prs.length > 0) {
+      <div class="section-title">שיאים חדשים 🎉</div>
+      @for (pr of d.prs; track pr.exerciseId + pr.kind) {
+        <div class="pr-row card">
+          <div class="pr-icon">
+            <aos-icon name="trophy" />
+          </div>
+          <div>
+            <div class="pr-name">{{ exerciseName(pr.exerciseId) }}</div>
+            <div class="pr-val">
+              {{ prLabel(pr) }}
+              @if (pr.previous) {
+                <span class="prev">(קודם: {{ pr.previous }})</span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    }
+
+    @if (milestoneCandidates().length > 0) {
+      <div class="section-title">קרוב לאבן דרך?</div>
+      @for (c of milestoneCandidates(); track c.ability.id) {
+        <div class="ms-row card">
+          <div>
+            <div class="ms-ability">{{ c.ability.name }}</div>
+            <div class="ms-title">{{ c.next.title }}</div>
+          </div>
+          <button class="unlock-btn" (click)="unlockMilestone(c.ability.id, c.next.id)">
+            הושג!
+          </button>
+        </div>
+      }
+    }
+
+    <button class="btn-primary done-btn" (click)="done()">סיום</button>
+  } @else {
+    <p class="empty-hint">אין סיכום להצגה.</p>
+    <a routerLink="/dashboard">לדשבורד</a>
+  }
+</div>

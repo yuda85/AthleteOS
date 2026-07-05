@@ -7,12 +7,22 @@ import { map } from 'rxjs';
 import { Icon } from '../../shared/icon/icon';
 import { ProgressBar } from '../../shared/progress-bar/progress-bar';
 import { VideoCard, detectPlatform } from '../../shared/video-card/video-card';
+import { LineChart, ChartPoint } from '../../shared/charts/line-chart';
 import { AbilityService } from '../../core/ability.service';
+import { SessionService } from '../../core/session.service';
 import { Milestone } from '../../models/models';
+import { EXERCISES } from '../../data/exercises.data';
+
+const abilityExercises = new Map<string, string[]>();
+for (const ex of EXERCISES) {
+  for (const abilityId of ex.abilityIds) {
+    abilityExercises.set(abilityId, [...(abilityExercises.get(abilityId) ?? []), ex.id]);
+  }
+}
 
 @Component({
   selector: 'aos-skill-detail-page',
-  imports: [RouterLink, FormsModule, DatePipe, Icon, ProgressBar, VideoCard],
+  imports: [RouterLink, FormsModule, DatePipe, Icon, ProgressBar, VideoCard, LineChart],
   templateUrl: './skill-detail-page.html',
   styleUrl: './skill-detail-page.scss',
 })
@@ -20,6 +30,7 @@ export class SkillDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   readonly abilityService = inject(AbilityService);
+  private readonly sessions = inject(SessionService);
 
   private readonly abilityId = toSignal(
     this.route.paramMap.pipe(map((p) => p.get('id') ?? '')),
@@ -34,6 +45,65 @@ export class SkillDetailPage {
 
   /** The first unachieved milestone — the current target. */
   readonly nextMilestone = computed(() => this.ability()?.milestones.find((m) => !m.achieved));
+
+  /** History: best value per session for this ability's exercises, by its metric. */
+  readonly historyPoints = computed<ChartPoint[]>(() => {
+    const ability = this.ability();
+    if (!ability) return [];
+    const exerciseIds = new Set(abilityExercises.get(ability.id) ?? []);
+    const points: ChartPoint[] = [];
+
+    for (const session of this.sessions.sessions()) {
+      let best = 0;
+      for (const entry of session.entries) {
+        if (!exerciseIds.has(entry.exerciseId)) continue;
+        for (const set of entry.sets) {
+          const value =
+            ability.metricType === 'load'
+              ? set.weight ?? 0
+              : ability.metricType === 'rounds'
+                ? set.rounds ?? 0
+                : (set.seconds ?? 0) / 60; // hold/session → minutes
+          if (value > best) best = value;
+        }
+      }
+      if (best > 0) points.push({ x: session.startedAt, y: best });
+    }
+    return points;
+  });
+
+  readonly historyUnit = computed(() => {
+    const metricType = this.ability()?.metricType;
+    if (metricType === 'load') return 'ק"ג';
+    if (metricType === 'rounds') return 'סבבים';
+    return 'דקות';
+  });
+
+  /** Personal bests for this ability's exercises. */
+  readonly prList = computed(() => {
+    const ability = this.ability();
+    if (!ability) return [];
+    const exerciseIds = abilityExercises.get(ability.id) ?? [];
+    const bests = this.sessions.bests();
+    const exerciseName = new Map(EXERCISES.map((e) => [e.id, e.name]));
+    const rows: { name: string; label: string }[] = [];
+
+    for (const id of exerciseIds) {
+      const best = bests.get(id);
+      if (!best) continue;
+      const parts: string[] = [];
+      if (best.weight) parts.push(`${best.weight} ק"ג`);
+      if (best.seconds) {
+        const m = Math.floor(best.seconds / 60);
+        const s = best.seconds % 60;
+        parts.push(m > 0 ? `${m}:${String(s).padStart(2, '0')} דק'` : `${s} שנ'`);
+      }
+      if (best.rounds) parts.push(`${best.rounds} סבבים`);
+      if (best.distance) parts.push(`${best.distance} ק"מ`);
+      if (parts.length) rows.push({ name: exerciseName.get(id) ?? id, label: parts.join(' · ') });
+    }
+    return rows;
+  });
 
   // Video form
   readonly showVideoForm = signal(false);

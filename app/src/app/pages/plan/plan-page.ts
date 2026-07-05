@@ -1,5 +1,7 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Icon } from '../../shared/icon/icon';
+import { ActiveWorkoutStore } from '../../core/active-workout.store';
 import { PLAN_DAYS, SYSTEM_RULE } from '../../data/plan.data';
 import { EXERCISES } from '../../data/exercises.data';
 import { Exercise, ExerciseCategory, ExerciseTier, PlanItem } from '../../models/models';
@@ -30,10 +32,23 @@ const exerciseById = new Map(EXERCISES.map((e) => [e.id, e]));
   styleUrl: './plan-page.scss',
 })
 export class PlanPage {
+  private readonly router = inject(Router);
+  private readonly workoutStore = inject(ActiveWorkoutStore);
+
   readonly days = PLAN_DAYS;
   readonly systemRule = SYSTEM_RULE;
   readonly todayIndex = new Date().getDay();
   readonly selectedIndex = signal(this.todayIndex);
+
+  readonly workoutActive = this.workoutStore.isActive;
+
+  startWorkout(): void {
+    void this.router.navigate(['/workout'], { queryParams: { day: this.selectedDay().id } });
+  }
+
+  resumeWorkout(): void {
+    void this.router.navigateByUrl('/workout');
+  }
 
   readonly selectedDay = computed(() => this.days[this.selectedIndex()]);
 

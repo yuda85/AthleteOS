@@ -1,0 +1,118 @@
+<div class="workout-view">
+  <header class="workout-header">
+    <div class="timer" [class.paused]="store.isPaused()">{{ elapsed() }}</div>
+    <div class="header-actions">
+      @if (store.isPaused()) {
+        <button class="hbtn" (click)="store.resume()" aria-label="המשך">
+          <aos-icon name="play" />
+        </button>
+      } @else {
+        <button class="hbtn" (click)="store.pause()" aria-label="השהה">
+          <aos-icon name="pause" />
+        </button>
+      }
+      <button class="hbtn finish" (click)="finish()" [disabled]="finishing()" aria-label="סיים אימון">
+        <aos-icon name="stop" />
+        סיים
+      </button>
+    </div>
+  </header>
+
+  @if (store.day(); as day) {
+    <div class="day-line">{{ day.label }} — {{ day.title }}</div>
+  } @else {
+    <div class="day-line">אימון חופשי</div>
+  }
+
+  <div class="rest-bar">
+    @if (restRemaining() > 0) {
+      <div class="rest-active">
+        מנוחה: <b>{{ restRemaining() }}</b> שנ'
+        <button class="rest-cancel" (click)="clearRest()">בטל</button>
+      </div>
+    } @else {
+      <span class="rest-label">טיימר מנוחה:</span>
+      @for (opt of restOptions; track opt) {
+        <button class="rest-chip" (click)="startRest(opt)">{{ opt }}s</button>
+      }
+    }
+  </div>
+
+  @for (entry of store.entries(); track entry.exerciseId) {
+    @if (exercise(entry.exerciseId); as ex) {
+      <div class="exercise-card card">
+        <div class="ex-head">
+          <div class="ex-name">
+            <aos-icon [name]="ex.icon" />
+            {{ ex.name }}
+          </div>
+          <button class="ex-remove" (click)="store.removeExercise(entry.exerciseId)" aria-label="הסר תרגיל">
+            <aos-icon name="trash" />
+          </button>
+        </div>
+
+        @if (entry.sets.length > 0) {
+          <ol class="set-list">
+            @for (set of entry.sets; track $index) {
+              <li>
+                <span class="set-num">{{ $index + 1 }}</span>
+                <span class="set-val">{{ setLabel(set) }}</span>
+                <button class="set-remove" (click)="store.removeSet(entry.exerciseId, $index)" aria-label="מחק סט">
+                  <aos-icon name="trash" />
+                </button>
+              </li>
+            }
+          </ol>
+        }
+
+        <div class="set-inputs" [attr.data-metric]="ex.metricType">
+          @switch (ex.metricType) {
+            @case ('weightReps') {
+              <input type="number" inputmode="decimal" min="0" [(ngModel)]="draft(entry.exerciseId).weight" placeholder='ק"ג' />
+              <input type="number" inputmode="numeric" min="0" [(ngModel)]="draft(entry.exerciseId).reps" placeholder="חזרות" />
+            }
+            @case ('time') {
+              <input type="number" inputmode="numeric" min="0" [(ngModel)]="draft(entry.exerciseId).minutes" placeholder="דקות" />
+              <input type="number" inputmode="numeric" min="0" max="59" [(ngModel)]="draft(entry.exerciseId).seconds" placeholder="שניות" />
+            }
+            @case ('rounds') {
+              <input type="number" inputmode="numeric" min="0" [(ngModel)]="draft(entry.exerciseId).rounds" placeholder="סבבים" />
+            }
+            @case ('session') {
+              <input type="number" inputmode="numeric" min="0" [(ngModel)]="draft(entry.exerciseId).minutes" placeholder="דקות" />
+              <input type="number" inputmode="decimal" min="0" [(ngModel)]="draft(entry.exerciseId).distanceKm" placeholder='ק"מ (אופציונלי)' />
+            }
+          }
+          <button class="add-set" (click)="addSet(entry.exerciseId)" aria-label="הוסף סט">
+            <aos-icon name="plus" />
+          </button>
+          @if (entry.sets.length > 0) {
+            <button class="repeat-set" (click)="repeatLast(entry.exerciseId)">כמו קודם</button>
+          }
+        </div>
+      </div>
+    }
+  }
+
+  <button class="add-exercise btn-primary" (click)="showAddExercise.set(true)">
+    <aos-icon name="plus" />
+    הוסף תרגיל
+  </button>
+
+  <button class="discard" (click)="discard()">ביטול אימון</button>
+
+  @if (showAddExercise()) {
+    <div class="sheet-backdrop" (click)="showAddExercise.set(false)"></div>
+    <div class="picker-sheet" role="dialog" aria-label="בחירת תרגיל">
+      <h3>הוסף תרגיל</h3>
+      <div class="picker-list">
+        @for (ex of availableToAdd(); track ex.id) {
+          <button class="picker-item" (click)="addExercise(ex.id)">
+            <aos-icon [name]="ex.icon" />
+            {{ ex.name }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

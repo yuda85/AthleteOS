@@ -1,0 +1,43 @@
+<div class="journal-view">
+  <h1>יומן אימונים</h1>
+
+  @if (!sessions.loaded()) {
+    <p class="empty-hint">טוען...</p>
+  } @else if (sessions.sessions().length === 0) {
+    <p class="empty-hint">אין אימונים עדיין. התחל אימון מהתוכנית — הוא יופיע כאן.</p>
+  }
+
+  @for (session of sessions.sessions(); track session.id) {
+    <div class="session-card card">
+      <button class="session-head" (click)="toggle(session.id)">
+        <div>
+          <div class="session-title">{{ dayTitle(session) }}</div>
+          <div class="session-meta">
+            {{ session.startedAt | date: 'EEEE, dd.MM.yy' }} · {{ duration(session) }} ·
+            {{ session.entries.length }} תרגילים
+          </div>
+        </div>
+        <aos-icon name="chevron" [class.open]="expanded() === session.id" />
+      </button>
+
+      @if (expanded() === session.id) {
+        <div class="session-body">
+          @for (entry of session.entries; track entry.exerciseId) {
+            <div class="entry">
+              <div class="entry-name">{{ exerciseName(entry.exerciseId) }}</div>
+              <ol class="entry-sets">
+                @for (set of entry.sets; track $index) {
+                  <li>{{ setLabel(set) }}</li>
+                }
+              </ol>
+            </div>
+          }
+          <button class="delete-session" (click)="deleteSession(session)">
+            <aos-icon name="trash" />
+            מחק אימון
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -199,6 +199,24 @@
   padding: var(--space-3);
 }
 
+.pr-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: 13.5px;
+
+  aos-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--cat-carry);
+    flex-shrink: 0;
+  }
+
+  .pr-name { flex: 1; font-weight: 600; }
+  .pr-value { color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+}
+
 .notes {
   width: 100%;
   resize: vertical;

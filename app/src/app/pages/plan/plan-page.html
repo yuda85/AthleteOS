@@ -22,7 +22,11 @@
       @if (day.focus) {
         <div class="meta">{{ day.focus }}</div>
       }
-      <button class="btn-accent start-btn" disabled>התחל אימון (בקרוב)</button>
+      @if (workoutActive()) {
+        <button class="btn-accent start-btn" (click)="resumeWorkout()">חזרה לאימון הפעיל</button>
+      } @else {
+        <button class="btn-accent start-btn" (click)="startWorkout()">התחל אימון</button>
+      }
     </div>
 
     @for (section of day.sections; track section.category) {

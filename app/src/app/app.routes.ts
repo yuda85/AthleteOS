@@ -32,9 +32,15 @@ export const routes: Routes = [
       },
       {
         path: 'journal',
-        data: { title: 'יומן' },
-        loadComponent: () =>
-          import('./pages/placeholder/placeholder-page').then((m) => m.PlaceholderPage),
+        loadComponent: () => import('./pages/journal/journal-page').then((m) => m.JournalPage),
+      },
+      {
+        path: 'workout',
+        loadComponent: () => import('./pages/workout/workout-page').then((m) => m.WorkoutPage),
+      },
+      {
+        path: 'workout/summary',
+        loadComponent: () => import('./pages/workout/summary-page').then((m) => m.SummaryPage),
       },
       {
         path: 'more',

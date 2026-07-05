@@ -88,6 +88,26 @@
     }
 
     <div class="section-head">
+      <h2>היסטוריה ({{ historyUnit() }})</h2>
+    </div>
+    <div class="card">
+      <aos-line-chart [points]="historyPoints()" [unit]="historyUnit()" />
+    </div>
+
+    @if (prList().length > 0) {
+      <div class="section-head">
+        <h2>שיאים אישיים</h2>
+      </div>
+      @for (pr of prList(); track pr.name) {
+        <div class="pr-line card">
+          <aos-icon name="trophy" />
+          <span class="pr-name">{{ pr.name }}</span>
+          <span class="pr-value">{{ pr.label }}</span>
+        </div>
+      }
+    }
+
+    <div class="section-head">
       <h2>הערות אימון</h2>
     </div>
     <textarea
