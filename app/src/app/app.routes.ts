@@ -13,9 +13,8 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
-        data: { title: 'דשבורד' },
         loadComponent: () =>
-          import('./pages/placeholder/placeholder-page').then((m) => m.PlaceholderPage),
+          import('./pages/dashboard/dashboard-page').then((m) => m.DashboardPage),
       },
       {
         path: 'plan',

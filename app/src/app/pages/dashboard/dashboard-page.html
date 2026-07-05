@@ -1,0 +1,70 @@
+<div class="dashboard-view">
+  <header class="hero">
+    <div class="hero-text">
+      <div class="greeting">שלום, {{ firstName() }}</div>
+      <div class="level-label">
+        רמת אתלט
+        <b>{{ stats.athleteLevel() }}</b>
+      </div>
+    </div>
+    <img src="logo.png" alt="" class="hero-logo" />
+  </header>
+
+  <div class="xp-block card">
+    <div class="xp-line">
+      <span>{{ stats.athleteLevel() }} אבני דרך הושגו</span>
+      <span class="xp-total">מתוך {{ stats.totalMilestones() }}</span>
+    </div>
+    <aos-progress-bar [value]="stats.athleteLevel()" [max]="stats.totalMilestones()" />
+  </div>
+
+  <div class="today card">
+    <div class="today-head">
+      <div>
+        <div class="today-label">האימון של היום</div>
+        <div class="today-title">{{ today.label }} — {{ today.title }}</div>
+      </div>
+      <button class="today-start" (click)="startToday()">
+        <aos-icon [name]="workoutStore.isActive() ? 'play' : 'power'" />
+        {{ workoutStore.isActive() ? 'חזרה לאימון' : 'התחל' }}
+      </button>
+    </div>
+    <a class="today-link" routerLink="/plan">לתוכנית המלאה ←</a>
+  </div>
+
+  <div class="section-title">פרופיל היכולות</div>
+  <div class="card radar-card">
+    <aos-radar-chart [axes]="radarAxes()" />
+  </div>
+
+  <div class="section-title">
+    עוגני השבוע
+    @if (stats.streak() > 0) {
+      <span class="streak">🔥 רצף {{ stats.streak() }} שבועות</span>
+    }
+  </div>
+  <div class="anchors">
+    @for (a of anchorItems(); track a.label) {
+      <div class="anchor card" [class.done]="a.done >= a.target">
+        <aos-icon [name]="a.icon" />
+        <div class="anchor-count">{{ a.done }}/{{ a.target }}</div>
+        <div class="anchor-label">{{ a.label }}</div>
+      </div>
+    }
+  </div>
+
+  @if (stats.recentUnlocks().length > 0) {
+    <div class="section-title">נעילות אחרונות</div>
+    @for (u of stats.recentUnlocks(); track u.abilityId + u.achievedAt) {
+      <a class="unlock card" [routerLink]="['/skills', u.abilityId]">
+        <div class="unlock-icon">
+          <aos-icon name="trophy" />
+        </div>
+        <div class="unlock-body">
+          <div class="unlock-title">{{ u.milestoneTitle }}</div>
+          <div class="unlock-meta">{{ u.abilityName }} · {{ u.achievedAt | date: 'dd.MM.yy' }}</div>
+        </div>
+      </a>
+    }
+  }
+</div>
