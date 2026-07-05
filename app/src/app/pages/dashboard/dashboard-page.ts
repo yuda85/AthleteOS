@@ -7,6 +7,7 @@ import { RadarChart, RadarAxis } from '../../shared/charts/radar-chart';
 import { AuthService } from '../../core/auth.service';
 import { StatsService } from '../../core/stats.service';
 import { ActiveWorkoutStore } from '../../core/active-workout.store';
+import { PwaService } from '../../core/pwa.service';
 import { PLAN_DAYS } from '../../data/plan.data';
 
 @Component({
@@ -20,6 +21,7 @@ export class DashboardPage {
   readonly auth = inject(AuthService);
   readonly stats = inject(StatsService);
   readonly workoutStore = inject(ActiveWorkoutStore);
+  readonly pwa = inject(PwaService);
 
   readonly firstName = computed(
     () => this.auth.user()?.displayName?.split(' ')[0] ?? 'אתלט',

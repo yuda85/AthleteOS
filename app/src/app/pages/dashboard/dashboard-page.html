@@ -1,4 +1,20 @@
 <div class="dashboard-view">
+  @if (pwa.updateAvailable()) {
+    <button class="banner update" (click)="pwa.reloadForUpdate()">
+      גרסה חדשה זמינה — לחץ לרענון
+    </button>
+  }
+
+  @if (pwa.canInstall()) {
+    <div class="banner install">
+      <span>התקן את AthleteOS כאפליקציה</span>
+      <div class="banner-actions">
+        <button class="banner-btn" (click)="pwa.install()">התקן</button>
+        <button class="banner-dismiss" (click)="pwa.dismissInstallHint()">לא עכשיו</button>
+      </div>
+    </div>
+  }
+
   <header class="hero">
     <div class="hero-text">
       <div class="greeting">שלום, {{ firstName() }}</div>
