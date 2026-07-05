@@ -1,0 +1,96 @@
+.skills-view {
+  padding: var(--space-3);
+  padding-bottom: calc(var(--tabbar-height) + var(--space-4));
+
+  h1 { font-size: 22px; margin: 0 0 var(--space-3); }
+}
+
+.empty-hint {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-4) 0;
+}
+
+.ability-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.ability-card {
+  display: block;
+  text-decoration: none;
+  color: var(--color-text);
+
+  h3 {
+    margin: var(--space-2) 0 4px;
+    font-size: 15px;
+  }
+}
+
+.ability-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ability-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--cat-skill);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.activity { background: var(--cat-mobility); }
+
+  aos-icon { width: 20px; height: 20px; }
+}
+
+.kind-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 1px 8px;
+}
+
+.level-line {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: var(--space-2);
+
+  .level { font-weight: 700; font-size: 14px; color: var(--color-accent); }
+  .of { font-size: 12px; color: var(--color-text-muted); }
+}
+
+.fab {
+  position: fixed;
+  bottom: calc(var(--tabbar-height) + var(--space-3));
+  inset-inline-start: 50%;
+  transform: translateX(50%);
+  margin-inline-start: calc(-240px + var(--space-3) + 28px);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+
+  aos-icon { width: 26px; height: 26px; }
+
+  @media (max-width: 520px) {
+    inset-inline-start: auto;
+    inset-inline-end: var(--space-3);
+    transform: none;
+    margin-inline-start: 0;
+  }
+}

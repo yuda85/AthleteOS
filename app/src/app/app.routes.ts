@@ -23,9 +23,12 @@ export const routes: Routes = [
       },
       {
         path: 'skills',
-        data: { title: 'מיומנויות' },
+        loadComponent: () => import('./pages/skills/skills-page').then((m) => m.SkillsPage),
+      },
+      {
+        path: 'skills/:id',
         loadComponent: () =>
-          import('./pages/placeholder/placeholder-page').then((m) => m.PlaceholderPage),
+          import('./pages/skills/skill-detail-page').then((m) => m.SkillDetailPage),
       },
       {
         path: 'journal',

@@ -1,0 +1,80 @@
+<div class="sheet-backdrop" (click)="closed.emit()"></div>
+<div class="sheet" role="dialog" aria-label="הוספת מיומנות">
+  <h2>מיומנות חדשה</h2>
+
+  <label class="field">
+    <span>שם</span>
+    <input type="text" [(ngModel)]="name" placeholder="למשל: פלאנש" />
+  </label>
+
+  <label class="field">
+    <span>סוג</span>
+    <select [(ngModel)]="kind">
+      <option value="skill">מיומנות (Skill)</option>
+      <option value="activity">פעילות (Activity)</option>
+    </select>
+  </label>
+
+  <label class="field">
+    <span>מדד עיקרי</span>
+    <select [(ngModel)]="metricType">
+      <option value="hold">זמן החזקה</option>
+      <option value="load">משקל</option>
+      <option value="session">זמן פעילות</option>
+      <option value="rounds">סבבים</option>
+    </select>
+  </label>
+
+  <div class="field">
+    <span>אייקון</span>
+    <div class="icon-grid">
+      @for (ic of iconChoices; track ic) {
+        <button
+          type="button"
+          class="icon-choice"
+          [class.selected]="icon === ic"
+          (click)="icon = ic"
+          [attr.aria-label]="ic"
+        >
+          <aos-icon [name]="ic" />
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="field">
+    <span>עמודי תווך (עד 3)</span>
+    <div class="pillar-chips">
+      @for (p of pillarChoices; track p.key) {
+        <button
+          type="button"
+          class="chip"
+          [class.selected]="selectedPillars().has($any(p.key))"
+          (click)="togglePillar(p.key)"
+        >
+          {{ p.title }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <label class="field">
+    <span>אבני דרך (שורה לכל אבן דרך, לפי הסדר)</span>
+    <textarea
+      rows="4"
+      [(ngModel)]="milestonesText"
+      placeholder="10 שנ' החזקה&#10;30 שנ' החזקה"
+    ></textarea>
+  </label>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  <div class="actions">
+    <button class="btn-primary" (click)="save()" [disabled]="saving()">
+      {{ saving() ? 'שומר...' : 'שמור' }}
+    </button>
+    <button class="btn-ghost" (click)="closed.emit()">ביטול</button>
+  </div>
+</div>

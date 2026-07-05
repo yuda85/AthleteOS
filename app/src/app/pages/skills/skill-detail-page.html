@@ -1,0 +1,120 @@
+<div class="detail-view">
+  @if (ability(); as a) {
+    <a class="back-link" routerLink="/skills">
+      <aos-icon name="chevron" />
+      מיומנויות
+    </a>
+
+    <div class="hero card">
+      <div class="hero-head">
+        <div class="hero-icon" [class.activity]="a.kind === 'activity'">
+          <aos-icon [name]="a.icon" />
+        </div>
+        <div>
+          <h1>{{ a.name }}</h1>
+          <div class="level-line">
+            רמה <b>{{ level() }}</b> מתוך {{ a.milestones.length }}
+            @if (nextMilestone(); as next) {
+              <span class="next-target">היעד הבא: {{ next.title }}</span>
+            } @else if (a.milestones.length > 0) {
+              <span class="next-target maxed">כל אבני הדרך הושגו 🏆</span>
+            }
+          </div>
+        </div>
+      </div>
+      <aos-progress-bar [value]="level()" [max]="a.milestones.length" />
+    </div>
+
+    <div class="section-head">
+      <h2>סולם אבני דרך</h2>
+      <button class="small-add" (click)="showMilestoneForm.set(!showMilestoneForm())">
+        <aos-icon name="plus" />
+      </button>
+    </div>
+
+    @if (showMilestoneForm()) {
+      <div class="inline-form card">
+        <input type="text" [(ngModel)]="milestoneTitle" placeholder="תיאור אבן הדרך" />
+        <button class="btn-accent" (click)="addMilestone()">הוסף</button>
+      </div>
+    }
+
+    <ol class="milestone-ladder">
+      @for (m of a.milestones; track m.id) {
+        <li [class.achieved]="m.achieved" [class.next]="m.id === nextMilestone()?.id">
+          <button class="ms-check" (click)="toggleMilestone(m)" [attr.aria-pressed]="m.achieved">
+            @if (m.achieved) {
+              <aos-icon name="check" />
+            } @else if (m.id === nextMilestone()?.id) {
+              <span class="target-dot"></span>
+            } @else {
+              <aos-icon name="lock" />
+            }
+          </button>
+          <div class="ms-body">
+            <span class="ms-title">{{ m.title }}</span>
+            @if (m.achievedAt) {
+              <span class="ms-date">{{ m.achievedAt | date: 'dd.MM.yy' }}</span>
+            }
+          </div>
+          <button class="ms-delete" (click)="deleteMilestone(m)" aria-label="מחק אבן דרך">
+            <aos-icon name="trash" />
+          </button>
+        </li>
+      }
+    </ol>
+
+    <div class="section-head">
+      <h2>סרטוני הדרכה</h2>
+      <button class="small-add" (click)="showVideoForm.set(!showVideoForm())">
+        <aos-icon name="plus" />
+      </button>
+    </div>
+
+    @if (showVideoForm()) {
+      <div class="inline-form card stacked">
+        <input type="url" [(ngModel)]="videoUrl" placeholder="קישור YouTube / Instagram / TikTok" dir="ltr" />
+        <input type="text" [(ngModel)]="videoTitle" placeholder="כותרת (אופציונלי)" />
+        <button class="btn-accent" (click)="addVideo()">הוסף סרטון</button>
+      </div>
+    }
+
+    @for (v of a.videos; track v.url) {
+      <aos-video-card [video]="v" (removed)="removeVideo(v.url)" />
+    } @empty {
+      @if (!showVideoForm()) {
+        <p class="empty-hint">אין סרטונים עדיין. הוסף קישור הדרכה ראשון.</p>
+      }
+    }
+
+    <div class="section-head">
+      <h2>הערות אימון</h2>
+    </div>
+    <textarea
+      class="notes card"
+      rows="3"
+      [ngModel]="a.notes"
+      (ngModelChange)="notesDraft = $event"
+      (blur)="saveNotes(notesDraft ?? a.notes)"
+      placeholder="רמזים טכניים, דגשים, תזכורות..."
+    ></textarea>
+
+    <button class="delete-ability" (click)="deleteAbility()">מחיקת מיומנות</button>
+
+    @if (confirmingMilestone(); as cm) {
+      <div class="sheet-backdrop" (click)="confirmingMilestone.set(null)"></div>
+      <div class="confirm-sheet" role="dialog">
+        <div class="trophy">
+          <aos-icon name="trophy" />
+        </div>
+        <h3>אבן דרך הושגה?</h3>
+        <p>{{ cm.title }}</p>
+        <button class="btn-accent" (click)="confirmMilestone()">כן — נעילת רמה חדשה!</button>
+        <button class="btn-ghost" (click)="confirmingMilestone.set(null)">עוד לא</button>
+      </div>
+    }
+  } @else if (abilityService.loaded()) {
+    <p class="empty-hint">מיומנות לא נמצאה.</p>
+    <a routerLink="/skills">חזרה למיומנויות</a>
+  }
+</div>

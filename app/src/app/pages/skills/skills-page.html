@@ -1,0 +1,36 @@
+<div class="skills-view">
+  <h1>מיומנויות</h1>
+
+  @if (!abilityService.loaded()) {
+    <p class="empty-hint">טוען...</p>
+  } @else if (abilityService.abilities().length === 0) {
+    <p class="empty-hint">אין מיומנויות עדיין. הוסף את הראשונה!</p>
+  }
+
+  <div class="ability-grid">
+    @for (ability of abilityService.abilities(); track ability.id) {
+      <a class="ability-card card" [routerLink]="['/skills', ability.id]">
+        <div class="ability-head">
+          <div class="ability-icon" [class.activity]="ability.kind === 'activity'">
+            <aos-icon [name]="ability.icon" />
+          </div>
+          <span class="kind-badge">{{ ability.kind === 'skill' ? 'מיומנות' : 'פעילות' }}</span>
+        </div>
+        <h3>{{ ability.name }}</h3>
+        <div class="level-line">
+          <span class="level">רמה {{ achievedCount(ability.milestones) }}</span>
+          <span class="of">/ {{ ability.milestones.length }}</span>
+        </div>
+        <aos-progress-bar [value]="achievedCount(ability.milestones)" [max]="ability.milestones.length" />
+      </a>
+    }
+  </div>
+
+  <button class="fab" (click)="showAddForm.set(true)" aria-label="הוסף מיומנות">
+    <aos-icon name="plus" />
+  </button>
+
+  @if (showAddForm()) {
+    <aos-add-ability-form (closed)="showAddForm.set(false)" />
+  }
+</div>
